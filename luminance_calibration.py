@@ -75,24 +75,12 @@ pixel_corrected = model_3.predict(jnd_corrected).flatten()  # jnd to pixel
 pixel_corrected = pixel_corrected.astype(int)
 
 print('Finished model')
-image_corrected = np.reshape(pixel_corrected, (img8.shape[0], img8.shape[1]))
+image_corrected = np.reshape(pixel
+corrected, (img8.shape[0], img8.shape[1]))
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')
-
-'''
-# Plot original and corrected image
-f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
-ax1.imshow(img8, cmap='gray')
-ax1.set_title('Original image')
-ax1.axis("off")
-ax2.imshow(image_corrected, cmap='gray')
-ax2.set_title('Corrected image')
-ax2.axis("off")
-plt.colorbar()
-plt.show()
-'''
-
+ 
 # Plot original and corrected image
 fig, (ax1, ax2) = plt.subplots(ncols=2)
 img1 = ax1.imshow(img8, cmap='gray')
