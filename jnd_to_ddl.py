@@ -6,7 +6,7 @@ from keras import optimizers
 from keras.models import Sequential
 import time
 
-"""This module trains a model to compute the measured jnd values for the corresponding DDL"""
+"""This module trains a model to compute the DDL for the corrected JND values"""
 
 start = time.time()
 
@@ -38,7 +38,7 @@ gray_level = np.linspace(1, 256, 256)
 # Create a dataset with (input, output) pairs
 dataset = []
 for i in range(len(jnd_measured_interp)):
-    dataset.append((gray_level[i], jnd_measured_interp[i]))
+    dataset.append((jnd_measured_interp[i], gray_level[i]))
 dataset = np.array(dataset)
 
 # Shuffle training data
@@ -71,7 +71,7 @@ EPOCHS = 10000
 # Train model
 history = model.fit(
     train_data, train_label,
-    epochs=EPOCHS, validation_split=0.2, verbose=0)
+    epochs=EPOCHS, validation_split=0.1, verbose=0)
 
 
 # Plot history
@@ -112,8 +112,8 @@ test_predictions = model.predict(test_data).flatten()
 _ = plt.plot([np.amin(test_label), np.amax(test_label)],
              [np.amin(test_label), np.amax(test_label)], '--r', label='Perfect line')
 plt.scatter(test_label, test_predictions, 2, label='Model output')
-plt.xlabel('Expected JND index')
-plt.ylabel('Predicted JND index')
+plt.xlabel('Expected DDL')
+plt.ylabel('Predicted DDL')
 plt.title('Predicted vs. expected values')
 plt.axis('equal')
 plt.axis('square')
@@ -126,7 +126,7 @@ plt.show()
 print(test_label, test_predictions)
 
 # Save entire model to a HDF5 file
-# model.save('ddl_to_jnd.h5')
+# model.save('jnd_to_ddl.h5')
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')

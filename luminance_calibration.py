@@ -75,8 +75,7 @@ pixel_corrected = model_3.predict(jnd_corrected).flatten()  # jnd to pixel
 pixel_corrected = pixel_corrected.astype(int)
 
 print('Finished model')
-image_corrected = np.reshape(pixel
-corrected, (img8.shape[0], img8.shape[1]))
+image_corrected = np.reshape(pixel_corrected, (img8.shape[0], img8.shape[1]))
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')

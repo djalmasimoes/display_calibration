@@ -1,15 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import os
-# import tensorflow as tf
-from tensorflow import keras
 from keras import layers
 from keras import optimizers
-# from keras.layers import InputLayer
 from keras.models import Sequential
+import time
 
-"""This module trains a model to compute the pixel values from the corrected jnd"""
+"""This module trains a model to compute the DDL for the corrected JND values"""
 
 # Read jnd files with measured and expected data
 with open('jnd_measured.txt') as f:
