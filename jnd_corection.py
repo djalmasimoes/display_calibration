@@ -35,10 +35,10 @@ xp = np.linspace(0, 255, len(jnd_expected))   # current length
 jnd_expected_interp = np.interp(x, xp, jnd_expected)
 
 # Plot measured and interpolated values
-plt.plot(xp, jnd_expected, 'ro', label='Measured')
-plt.plot(jnd_expected_interp, 'b--', label='Interpolated')
+plt.plot(xp, jnd_measured, 'ro', label='Measured')
+plt.plot(jnd_measured_interp, 'b--', label='Interpolated')
 plt.xlabel('Digital driving level (DDL)')
-plt.ylabel('Luminance [cd/ $m^{2}$]')
+plt.ylabel('JND index')
 plt.title('JND interpolation')
 plt.legend()
 plt.grid()
@@ -67,7 +67,7 @@ test_label = dataset[:, 1]
 
 # Build model
 model = Sequential()
-model.add(layers.Dense(512, input_dim=1, activation='relu'))
+model.add(layers.Dense(1024, input_dim=1, activation='relu'))
 model.add(layers.Dense(1))
 model.compile(loss='mean_squared_error',
               optimizer=optimizers.RMSprop(lr=0.001, rho=0.9),
@@ -135,7 +135,13 @@ plt.show()
 print(test_label, test_predictions)
 
 # Save entire model to a HDF5 file
-model.save('jnd_correction.h5')
+# model.save('jnd_correction_10.h5')
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')
+
+# save train mean squared error
+np.savetxt('model_2_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
+
+# save validation mean squared error
+np.savetxt('model_2_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')

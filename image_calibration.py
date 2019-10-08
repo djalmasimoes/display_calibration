@@ -9,12 +9,12 @@ import imageio
 
 start = time.time()
 
-im = Image.open('C:/Users/Djalma/Google Drive/University/Doctorate - BME/Repository/display_calibration/Test patterns TG270/52 tests/TG270ULN80035.tif')
+im = Image.open('C:/Users/Djalma/Google Drive/University/Doctorate - BME/Repository/display_calibration/Test patterns TG270/TG270-sQC.tif')
 im.show()
 
 # Load the models, including weights and optimizer.
 model_1 = keras.models.load_model('ddl_to_jnd.h5')
-model_2 = keras.models.load_model('jnd_correction.h5')
+model_2 = keras.models.load_model('jnd_correction_10.h5')
 model_3 = keras.models.load_model('jnd_to_ddl.h5')
 
 # Run the models
@@ -38,6 +38,7 @@ for i in range(len(pixel)):
     pixel[i] = pixel_corrected[i]
 
 image_calibrated = np.reshape(pixel, (np.array(im).shape[0], np.array(im).shape[1]))
-imageio.imwrite('filename.tif', image_calibrated)
+imageio.imwrite('corr_TG270-sQC.tif', image_calibrated)
 
-Image.open('filename.tif').show()
+Image.open('corr_TG270-sQC.tif').show()
+print('Image saved')

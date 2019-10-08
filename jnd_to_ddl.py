@@ -10,7 +10,7 @@ import time
 
 start = time.time()
 
-# Read txt file with JND measurements (length = 18)
+# Read txt file with JND measurements (length = 18 or 52)
 with open('jnd_meas.txt') as f:
     jnd_measured = f.read()
 jnd_measured = jnd_measured.split()
@@ -18,8 +18,8 @@ jnd_measured = list(map(float, jnd_measured))
 jnd_measured = np.array(jnd_measured, dtype=float)  # input data
 
 # Interpolate JND values (length = 256)
-x = np.linspace(1, 256, 256)    # desired length
-xp = np.linspace(1, 256, len(jnd_measured))   # current length
+x = np.linspace(0, 255, 256)    # desired length
+xp = np.linspace(0, 255, len(jnd_measured))   # current length
 jnd_measured_interp = np.interp(x, xp, jnd_measured)
 
 # Plot measured and interpolated values
@@ -33,7 +33,7 @@ plt.grid()
 plt.show()
 
 # Create array gray levels (1-256 for 8-bits)
-gray_level = np.linspace(1, 256, 256)
+gray_level = np.linspace(0, 255, 256)
 
 # Create a dataset with (input, output) pairs
 dataset = []
@@ -65,7 +65,7 @@ model.compile(loss='mean_squared_error',
               metrics=['mean_absolute_error', 'mean_squared_error'])
 model.summary()
 
-EPOCHS = 10000
+EPOCHS = 5000
 
 
 # Train model
@@ -130,3 +130,9 @@ print(test_label, test_predictions)
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')
+
+# save train mean squared error
+np.savetxt('model_3_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
+
+# save validation mean squared error
+np.savetxt('model_3_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')
