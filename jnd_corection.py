@@ -16,6 +16,7 @@ with open('jnd_meas.txt') as f:
 jnd_measured = jnd_measured.split()
 jnd_measured = list(map(float, jnd_measured))
 jnd_measured = np.array(jnd_measured, dtype=float)  # input data
+jnd_measured = jnd_measured[:-8]
 
 # Read expected JND (length 256)
 with open('jnd_exp.txt') as f:
@@ -23,20 +24,21 @@ with open('jnd_exp.txt') as f:
 jnd_expected = jnd_expected.split()
 jnd_expected = list(map(float, jnd_expected))
 jnd_expected = np.array(jnd_expected, dtype=float)  # output data
+jnd_expected = jnd_expected[:-8]
 
 # Interpolate measured JND (length = 256)
-x = np.linspace(0, 255, 256)    # desired length
-xp = np.linspace(0, 255, len(jnd_measured))   # current length
+x = np.linspace(0, 255-8, 256-8)    # desired length
+xp = np.linspace(0, 255-8, len(jnd_measured))   # current length
 jnd_measured_interp = np.interp(x, xp, jnd_measured)
 
 # Interpolate expected JND (length = 256)
-x = np.linspace(0, 255, 256)    # desired length
-xp = np.linspace(0, 255, len(jnd_expected))   # current length
+x = np.linspace(0, 255-8, 256-8)    # desired length
+xp = np.linspace(0, 255-8, len(jnd_expected))   # current length
 jnd_expected_interp = np.interp(x, xp, jnd_expected)
 
 # Plot measured and interpolated values
-plt.plot(xp, jnd_measured, 'ro', label='Measured')
-plt.plot(jnd_measured_interp, 'b--', label='Interpolated')
+plt.plot(xp, jnd_expected, 'ro', label='Measured')
+plt.plot(jnd_expected_interp, 'b--', label='Interpolated')
 plt.xlabel('Digital driving level (DDL)')
 plt.ylabel('JND index')
 plt.title('JND interpolation')
@@ -74,7 +76,7 @@ model.compile(loss='mean_squared_error',
               metrics=['mean_absolute_error', 'mean_squared_error'])
 model.summary()
 
-EPOCHS = 10000
+EPOCHS = 30000
 
 
 # Train model
@@ -135,10 +137,11 @@ plt.show()
 print(test_label, test_predictions)
 
 # Save entire model to a HDF5 file
-# model.save('jnd_correction_10.h5')
+model.save('jnd_correction.h5')
 
 end = time.time()
 print('Elapsed time:', end - start, 'seconds')
+print('End')
 
 # save train mean squared error
 np.savetxt('model_2_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
