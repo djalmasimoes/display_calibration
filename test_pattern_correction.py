@@ -8,10 +8,10 @@ model_1 = keras.models.load_model('ddl_to_jnd.h5')
 model_2 = keras.models.load_model('jnd_correction.h5')
 model_3 = keras.models.load_model('jnd_to_ddl.h5')
 
-for n in range(255, 260, 5):
+for n in range(250, 260, 5):
     n = f"{n:03d}"
     # Path of the test patterns
-    im = Image.open('./Test patterns TG270/52 tests/TG270-ULN8-'+str(n)+'.tif')
+    im = Image.open('./Test patterns TG270/52/TG270-ULN8-'+str(n)+'.tif')
 
     # Run the models
     pixel = np.array(im).ravel()

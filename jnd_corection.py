@@ -4,14 +4,12 @@ import pandas as pd
 from keras import layers
 from keras import optimizers
 from keras.models import Sequential
-import time
 
 """This module trains a model to correct the JND indexes"""
 
-start = time.time()
 
 # Read measured JND (length 18 or 52)
-with open('jnd_meas.txt') as f:
+with open('./monitor Samsung/jnd_meas.txt') as f:
     jnd_measured = f.read()
 jnd_measured = jnd_measured.split()
 jnd_measured = list(map(float, jnd_measured))
@@ -19,7 +17,7 @@ jnd_measured = np.array(jnd_measured, dtype=float)  # input data
 jnd_measured = jnd_measured[:-8]
 
 # Read expected JND (length 256)
-with open('jnd_exp.txt') as f:
+with open('./monitor Samsung/jnd_exp.txt') as f:
     jnd_expected = f.read()
 jnd_expected = jnd_expected.split()
 jnd_expected = list(map(float, jnd_expected))
@@ -139,8 +137,6 @@ print(test_label, test_predictions)
 # Save entire model to a HDF5 file
 model.save('jnd_correction.h5')
 
-end = time.time()
-print('Elapsed time:', end - start, 'seconds')
 print('End')
 
 # save train mean squared error
@@ -148,3 +144,7 @@ np.savetxt('model_2_train_MSE.txt', history.history['mean_squared_error'], delim
 
 # save validation mean squared error
 np.savetxt('model_2_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')
+
+# save test predictions
+np.savetxt('model_2_expected.txt', test_label, delimiter=',')
+np.savetxt('model_2_prediction.txt', test_predictions, delimiter=',')

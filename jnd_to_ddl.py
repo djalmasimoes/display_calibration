@@ -4,14 +4,12 @@ import pandas as pd
 from keras import layers
 from keras import optimizers
 from keras.models import Sequential
-import time
 
 """This module trains a model to compute the DDL for the corrected JND values"""
 
-start = time.time()
 
 # Read txt file with JND measurements (length = 18 or 52)
-with open('jnd_meas.txt') as f:
+with open('./monitor Samsung/jnd_meas.txt') as f:
     jnd_measured = f.read()
 jnd_measured = jnd_measured.split()
 jnd_measured = list(map(float, jnd_measured))
@@ -118,8 +116,8 @@ plt.ylabel('Predicted DDL')
 plt.title('Predicted vs. expected values')
 plt.axis('equal')
 plt.axis('square')
-plt.xlim([0, plt.xlim()[1]])
-plt.ylim([0, plt.ylim()[1]])
+# plt.xlim([0, plt.xlim()[1]])
+# plt.ylim([0, plt.ylim()[1]])
 plt.legend()
 plt.grid()
 plt.show()
@@ -130,12 +128,12 @@ print(result)
 # Save entire model to a HDF5 file
 model.save('jnd_to_ddl.h5')
 
-end = time.time()
-print('Elapsed time:', end - start, 'seconds')
-print('end')
-
 # save train mean squared error
 np.savetxt('model_3_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
 
 # save validation mean squared error
 np.savetxt('model_3_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')
+
+# save test predictions
+np.savetxt('model_3_expected.txt', test_label, delimiter=',')
+np.savetxt('model_3_prediction.txt', test_predictions, delimiter=',')
