@@ -1,22 +1,35 @@
+# gray_level_to_jnd.py
+# This module trains a model to predict the measured JND index of the display for each gray level
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from keras import layers
 from keras import optimizers
 from keras.models import Sequential
-import time
 
-"""This module trains a model to compute the measured jnd values for the corresponding DDL"""
+# Read txt file with luminance measurements
+with open('luminance_measured.txt') as f:
+    lum_measured = f.read()
+lum_measured = lum_measured .split()
+lum_measured = list(map(float, lum_measured))
+lum_measured = np.array(lum_measured , dtype=float)
+lum_measured = lum_measured[:]
 
-# start = time.time()
+# Convert luminance values to JND index
+A = 71.498068
+B = 94.593053
+C = 41.912053
+D = 9.8247004
+E = 0.28175407
+F = -1.1878455
+G = -0.18014349
+H = 0.14710899
+I = -0.017046845
 
-# Read txt file with JND measurements (length = 18)
-with open('./monitor Samsung/jnd_meas.txt') as f:
-    jnd_measured = f.read()
-jnd_measured = jnd_measured.split()
-jnd_measured = list(map(float, jnd_measured))
-jnd_measured = np.array(jnd_measured, dtype=float)  # input data
-jnd_measured = jnd_measured[:]
+jnd_measured = A + B * (np.log10(lum_measured))**1 + C * (np.log10(lum_measured))**2 + D * (np.log10(lum_measured))**3 + \
+    E * (np.log10(lum_measured))**4 + F * (np.log10(lum_measured))**5 + G * (np.log10(lum_measured))**6 + \
+    H * (np.log10(lum_measured))**7 + I * (np.log10(lum_measured))**8
 
 # Interpolate JND values (length = 256)
 x = np.linspace(0, 255, 256)    # desired length
@@ -44,12 +57,6 @@ dataset = np.array(dataset)
 
 # Shuffle training data
 np.random.shuffle(dataset)
-
-'''# Split training and testing sets (data, label)
-train_data = dataset[:204, 0]
-train_label = dataset[:204, 1]
-test_data = dataset[204:, 0]
-test_label = dataset[204:, 1]'''
 
 # Split training and testing sets (data, label)
 train_data = dataset[:, 0]
@@ -127,18 +134,4 @@ plt.show()
 print(test_label, test_predictions)
 
 # Save entire model to a HDF5 file
-#model.save('ddl_to_jnd.h5')
-
-# end = time.time()
-# print('Elapsed time:', end - start, 'seconds')
- print('end')
-
-# save train mean squared error
-#np.savetxt('model_1_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
-
-# save validation mean squared error
-#np.savetxt('model_1_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')
-
-# save test predictions
-np.savetxt('model_1_expected.txt', test_label, delimiter=',')
-np.savetxt('model_1_prediction.txt', test_predictions, delimiter=',')
+# model.save('model_one.h5')

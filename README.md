@@ -11,7 +11,7 @@ according to the DICOM GSDF.
 
 The project is splitted in several sub-modules:
 
-* **model-1**: This is a model to predict the measured JND index of the display for each gray level 
+* **gray_level_to_jnd.py**: Model 1 of the paper. This model predicts the measured JND index of the display for each gray level 
 * **model-2**:
  This is a model to correct the JND indexes according to the DICOM GSDF
 * **model-3**:
