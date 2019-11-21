@@ -31,6 +31,9 @@ jnd_measured = A + B * (np.log10(lum_measured))**1 + C * (np.log10(lum_measured)
     E * (np.log10(lum_measured))**4 + F * (np.log10(lum_measured))**5 + G * (np.log10(lum_measured))**6 + \
     H * (np.log10(lum_measured))**7 + I * (np.log10(lum_measured))**8
 
+# Save measured JND values
+np.savetxt('jnd_measured.txt', jnd_measured, delimiter=',')
+
 # Interpolate JND values (length = 256)
 x = np.linspace(0, 255, 256)    # desired length
 xp = np.linspace(0, 255, len(jnd_measured))   # current length
@@ -131,7 +134,11 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print(test_label, test_predictions)
+result = dict(zip(test_label, test_predictions))
+print(result)
 
-# Save entire model to a HDF5 file
+# Save model in a HDF5 file
 # model.save('model_one.h5')
+
+
+

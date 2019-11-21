@@ -1,3 +1,6 @@
+# jnd_correction.py
+# This module trains a model to correct the JND indexes
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -5,44 +8,41 @@ from keras import layers
 from keras import optimizers
 from keras.models import Sequential
 
-"""This module trains a model to correct the JND indexes"""
-
-
 # Read measured JND (length 18 or 52)
-with open('./monitor Samsung/jnd_meas.txt') as f:
+with open('jnd_measured.txt') as f:
     jnd_measured = f.read()
 jnd_measured = jnd_measured.split()
 jnd_measured = list(map(float, jnd_measured))
-jnd_measured = np.array(jnd_measured, dtype=float)  # input data
-jnd_measured = jnd_measured[:-8]
+jnd_measured = np.array(jnd_measured, dtype=float)
+jnd_measured = jnd_measured[:-5]
 
-# Read expected JND (length 256)
-with open('./monitor Samsung/jnd_exp.txt') as f:
-    jnd_expected = f.read()
-jnd_expected = jnd_expected.split()
-jnd_expected = list(map(float, jnd_expected))
-jnd_expected = np.array(jnd_expected, dtype=float)  # output data
-jnd_expected = jnd_expected[:-8]
+# Create array gray levels (1-256 for 8-bits)
+gray_level = np.linspace(0, 255, 256)
 
-# Interpolate measured JND (length = 256)
-x = np.linspace(0, 255-8, 256-8)    # desired length
-xp = np.linspace(0, 255-8, len(jnd_measured))   # current length
-jnd_measured_interp = np.interp(x, xp, jnd_measured)
+# Calculate mean JND/GL
+jnd_mean = (max(jnd_measured) - min(jnd_measured))/(max(gray_level) - min(gray_level))
 
-# Interpolate expected JND (length = 256)
-x = np.linspace(0, 255-8, 256-8)    # desired length
-xp = np.linspace(0, 255-8, len(jnd_expected))   # current length
-jnd_expected_interp = np.interp(x, xp, jnd_expected)
+# Calculate expected JND
+jnd_expected = range(1, len(jnd_measured)+1)
+jnd_expected = np.array(jnd_expected, dtype=float)
+for n in range(1, len(jnd_measured)+1):
+    jnd_expected[n-1] = jnd_measured[0] + (n-1)*(jnd_measured[-1] - jnd_measured[0])/(len(jnd_measured)-1)
 
-# Plot measured and interpolated values
-plt.plot(xp, jnd_expected, 'ro', label='Measured')
-plt.plot(jnd_expected_interp, 'b--', label='Interpolated')
+# Plot measured and expected JND indexes
+plt.plot(np.linspace(0, 255, len(jnd_expected)), jnd_expected, 'bs', label='Expected')
+plt.plot(np.linspace(0, 255, len(jnd_expected)), jnd_measured, 'ro', label='Measured')
 plt.xlabel('Digital driving level (DDL)')
 plt.ylabel('JND index')
-plt.title('JND interpolation')
+plt.title('JND response')
 plt.legend()
 plt.grid()
 plt.show()
+
+# Interpolate measured and expected JND (length = 256)
+x = np.linspace(0, 255, 256)    # desired length
+xp = np.linspace(0, 255, len(jnd_measured))   # current length
+jnd_measured_interp = np.interp(x, xp, jnd_measured)
+jnd_expected_interp = np.interp(x, xp, jnd_expected)
 
 # Create training_data = (input, output) pairs
 dataset = [] = []
@@ -52,12 +52,6 @@ dataset = np.array(dataset)
 
 # Shuffle training data
 np.random.shuffle(dataset)
-
-'''# Split training and testing sets (data, label)
-train_data = dataset[:204, 0]
-train_label = dataset[:204, 1]
-test_data = dataset[204:, 0]
-test_label = dataset[204:, 1]'''
 
 # Split training and testing sets (data, label)
 train_data = dataset[:, 0]
@@ -75,7 +69,6 @@ model.compile(loss='mean_squared_error',
 model.summary()
 
 EPOCHS = 30000
-
 
 # Train model
 history = model.fit(
@@ -126,25 +119,13 @@ plt.ylabel('Predicted JND index')
 plt.title('Predicted vs. expected values')
 plt.axis('equal')
 plt.axis('square')
-# plt.xlim([0, plt.xlim()[1]])
-# plt.ylim([0, plt.ylim()[1]])
 plt.legend()
 plt.grid()
 plt.show()
 
-print(test_label, test_predictions)
+result = dict(zip(test_label, test_predictions))
+print(result)
 
-# Save entire model to a HDF5 file
-model.save('jnd_correction.h5')
+# Save model in a HDF5 file
+# model.save('jnd_correction.h5')
 
-print('End')
-
-# save train mean squared error
-np.savetxt('model_2_train_MSE.txt', history.history['mean_squared_error'], delimiter=',')
-
-# save validation mean squared error
-np.savetxt('model_2_val_MSE.txt', history.history['val_mean_squared_error'], delimiter=',')
-
-# save test predictions
-np.savetxt('model_2_expected.txt', test_label, delimiter=',')
-np.savetxt('model_2_prediction.txt', test_predictions, delimiter=',')
