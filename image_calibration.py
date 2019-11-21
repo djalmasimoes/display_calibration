@@ -12,14 +12,14 @@ model_2 = keras.models.load_model('model_2.h5')
 model_3 = keras.models.load_model('model_3.h5')
 
 # Name and path of the image
-file = 'TG270-pQC.tif'
-im = Image.open('./TG270 test patterns /'+file)
+file = 'TG270-sQC.tif'
+im = Image.open('./TG270 test patterns/'+file)
 
 # Run the models
 pixel = np.array(im).ravel()
-jnd_predicted = model_1.predict(pixel).flatten()  # pixel to luminance
-jnd_corrected = model_2.predict(jnd_predicted).flatten()  # jnd correction
-pixel_corrected = model_3.predict(jnd_corrected).flatten()  # jnd to pixel
+jnd_predicted = model_1.predict(pixel).flatten()
+jnd_corrected = model_2.predict(jnd_predicted).flatten()
+pixel_corrected = model_3.predict(jnd_corrected).flatten()
 pixel_corrected = pixel_corrected.astype(int)
 
 # Correct the image
