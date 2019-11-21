@@ -37,14 +37,14 @@ The project is splitted in several sub-modules:
 
 1. Perform luminance measurements using the TG270-ULN test patterns
 2. Insert the values obtained from luminance measurements in the file "measured_luminance.txt" 
-3. Run "gray_level_to_jnd.py" to train and validate model one*
-4. Run "jnd_correction.py" to train and validate the model*
-5. Run "model-3.py" to train and validate the model*
+3. Run "gray_level_to_jnd.py" to train and validate model 1*
+4. Run "jnd_correction.py" to train and validate model 2*
+5. Run "model-3.py" to train and validate model 3*
 6. Run "test_pattern_correction.py" to apply the ANN to calibrate the TG270-ULN test patterns
 7. Repeat luminance measurement using the calibrated TG270-ULN test patterns
 8. Run "image_calibration.py" to calibrate any grayscale input image
 
-*Uncomment the last line of code to save the model (HDF5 file) in the directory
+*Uncomment the last line of code to save the model in a HDF5 file
 
 ## Author
 Djalms S. Santos - Budapest University of Technology and Economics - BME

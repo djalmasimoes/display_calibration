@@ -8,7 +8,7 @@ from keras import layers
 from keras import optimizers
 from keras.models import Sequential
 
-# Read measured JND (length 18 or 52)
+# Read txt file with measured JND
 with open('jnd_measured.txt') as f:
     jnd_measured = f.read()
 jnd_measured = jnd_measured.split()
@@ -127,5 +127,5 @@ result = dict(zip(test_label, test_predictions))
 print(result)
 
 # Save model in a HDF5 file
-# model.save('jnd_correction.h5')
+# model.save('model_2.h5')
 

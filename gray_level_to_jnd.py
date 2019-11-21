@@ -138,7 +138,7 @@ result = dict(zip(test_label, test_predictions))
 print(result)
 
 # Save model in a HDF5 file
-# model.save('model_one.h5')
+# model.save('model_1.h5')
 
 
 
