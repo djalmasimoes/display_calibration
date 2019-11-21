@@ -4,13 +4,13 @@ from PIL import Image
 import imageio
 
 # Load the models, including weights and optimizer.
-model_1 = keras.models.load_model('ddl_to_jnd.h5')
-model_2 = keras.models.load_model('jnd_correction.h5')
-model_3 = keras.models.load_model('jnd_to_ddl.h5')
+model_1 = keras.models.load_model('model_1.h5')
+model_2 = keras.models.load_model('model_2.h5')
+model_3 = keras.models.load_model('model_3.h5')
 
 # Name and path of the image
 file = 'TG270-pQC.tif'
-im = Image.open('./Test patterns TG270/'+file)
+im = Image.open('./TG270 test patterns /'+file)
 
 # Run the models
 pixel = np.array(im).ravel()
