@@ -1,5 +1,5 @@
 # test_pattern_correction.py
-# This module trains a model to predict the gray level of the display for each JND index
+# This module calibrates the TG270 test patterns
 
 import numpy as np
 from tensorflow import keras
