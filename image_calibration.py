@@ -1,3 +1,6 @@
+# image_calibration.py
+# This module calibrates an input gray scale image according to the DICOM GSDF
+
 import numpy as np
 from tensorflow import keras
 from PIL import Image
