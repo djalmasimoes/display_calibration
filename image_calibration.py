@@ -12,7 +12,7 @@ model_2 = keras.models.load_model('model_2.h5')
 model_3 = keras.models.load_model('model_3.h5')
 
 # Name and path of the image
-file = 'TG270-sQC.tif'
+file = 'TG270-pQC.tif'
 im = Image.open('./TG270 test patterns/'+file)
 
 # Run the models
