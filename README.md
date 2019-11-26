@@ -15,7 +15,7 @@ The project is splitted in several sub-modules:
 * **jnd_correction.py**:
  Model 2 of the paper. This model predicts the expected JND index (DICOM GSDF)
 * **jnd_to_gray_level.py**:
- This is a model to predict the expected gray level for each JND value
+ Model 3 of the paper. This model predicts the expected gray level (DICOM GSDF)
 * **test_pattern_correction**:
  This module calibrates the TG270 test patterns
 * **image calibration**:
