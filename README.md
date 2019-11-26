@@ -16,11 +16,15 @@ The project is splitted in several sub-modules:
  Model 2 of the paper. This model predicts the expected JND index (DICOM GSDF)
 * **jnd_to_gray_level.py**:
  Model 3 of the paper. This model predicts the expected gray level (DICOM GSDF)
-* **test_pattern_correction**:
+* **test_pattern_correction.py**:
  This module calibrates the TG270 test patterns
-* **image calibration**:
+* **image calibration.py**:
  This module calibrates a grayscale input image
 
+Folders:
+
+* **TG270 test patterns**: This folder contains the TG270-ULN8 (18 and 52 versions), TG270-pQC, and TG270-sQC test patterns
+* **TG270_corrected**: This folder is where the calibrated tests patterns are saved when running test_pattern_correction.py
 
 
 ### Requirements
